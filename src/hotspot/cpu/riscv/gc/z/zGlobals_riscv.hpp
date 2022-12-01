@@ -23,11 +23,11 @@
  *
  */
 
-#ifndef CPU_AARCH64_GC_Z_ZGLOBALS_AARCH64_HPP
-#define CPU_AARCH64_GC_Z_ZGLOBALS_AARCH64_HPP
+#ifndef CPU_RISCV_GC_Z_ZGLOBALS_RISCV_HPP
+#define CPU_RISCV_GC_Z_ZGLOBALS_RISCV_HPP
 
 #include "utilities/globalDefinitions.hpp"
 
 const size_t ZPlatformCacheLineSize    = 64;
 
-#endif // CPU_AARCH64_GC_Z_ZGLOBALS_AARCH64_HPP
+#endif // CPU_RISCV_GC_Z_ZGLOBALS_RISCV_HPP

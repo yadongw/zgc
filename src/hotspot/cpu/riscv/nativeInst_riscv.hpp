@@ -79,6 +79,13 @@ class NativeInstruction {
   static bool is_addi_at(address instr)       { assert_cond(instr != NULL); return extract_opcode(instr) == 0b0010011 && extract_funct3(instr) == 0b000; }
   static bool is_addiw_at(address instr)      { assert_cond(instr != NULL); return extract_opcode(instr) == 0b0011011 && extract_funct3(instr) == 0b000; }
   static bool is_lui_at(address instr)        { assert_cond(instr != NULL); return extract_opcode(instr) == 0b0110111; }
+  static bool is_srli_at(address instr) {
+    assert_cond(instr != NULL);
+    return extract_opcode(instr) == 0b0010011 &&
+           extract_funct3(instr) == 0b101 &&
+           Assembler::extract(((unsigned*)instr)[0], 31, 26) == 0b000000;
+  }
+
   static bool is_slli_shift_at(address instr, uint32_t shift) {
     assert_cond(instr != NULL);
     return (extract_opcode(instr) == 0b0010011 && // opcode field
@@ -151,6 +158,17 @@ class NativeInstruction {
            extract_rs1(addi4) == extract_rd(addi4);
   }
 
+  // the instruction sequence of li16u is as below:
+  //     lui
+  //     srli
+  static bool check_li16u_data_dependency(address instr) {
+    address lui = instr;
+    address srli = lui + instruction_size;
+
+    return extract_rs1(srli) == extract_rd(lui) &&
+           extract_rs1(srli) == extract_rd(srli);
+  }
+
   // the instruction sequence of li32 is as below:
   //     lui
   //     addiw
@@ -184,6 +202,7 @@ class NativeInstruction {
   }
 
   static bool is_movptr_at(address instr);
+  static bool is_li16u_at(address instr);
   static bool is_li32_at(address instr);
   static bool is_li64_at(address instr);
   static bool is_pc_relative_at(address branch);

@@ -97,6 +97,12 @@ bool NativeInstruction::is_movptr_at(address instr) {
          check_movptr_data_dependency(instr);
 }
 
+bool NativeInstruction::is_li16u_at(address instr) {
+  return is_lui_at(instr) && // lui
+         is_srli_at(instr + instruction_size) && // srli
+         check_li16u_data_dependency(instr);
+}
+
 bool NativeInstruction::is_li32_at(address instr) {
   return is_lui_at(instr) && // lui
          is_addiw_at(instr + instruction_size) && // addiw
