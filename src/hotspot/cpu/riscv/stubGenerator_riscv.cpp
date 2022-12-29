@@ -938,7 +938,9 @@ class StubGenerator: public StubCodeGenerator {
   void copy_memory(DecoratorSet decorators, BasicType type, bool is_aligned,
                    Register s, Register d, Register count, Register tmp, int step) {
     if (UseRVV) {
-      return copy_memory_v(s, d, count, tmp, step);
+      // TODO: add gc barriers when copying oops
+      if (UseZGC && !is_reference_type(type))
+        return copy_memory_v(s, d, count, tmp, step);
     }
 
     bool is_backwards = step < 0;
