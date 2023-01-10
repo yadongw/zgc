@@ -117,7 +117,7 @@ instruct zStoreP(memory mem, iRegP src, iRegPNoSp tmp, rFlagsReg cr)
   effect(TEMP tmp, KILL cr);
 
   ins_cost(125); // XXX
-  format %{ "movq    $mem, $src\t# ptr" %}
+  format %{ "sd    $mem, $src\t# ptr" %}
   ins_encode %{
     const Address ref_addr(as_Register($mem$$base), $mem$$disp);
     z_store_barrier(_masm, this, ref_addr, $src$$Register, $tmp$$Register, t1, false /* is_atomic */);

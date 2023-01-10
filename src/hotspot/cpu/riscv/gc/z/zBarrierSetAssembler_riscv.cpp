@@ -422,10 +422,6 @@ void ZBarrierSetAssembler::store_at(MacroAssembler* masm,
   BarrierSetAssembler::store_at(masm, decorators, type, dst, tmp1, tmp2, tmp3, noreg);
 }
 
-static void load_wide_arraycopy_masks(MacroAssembler* masm) {
-  // TODO: load vector masks
-}
-
 class ZCopyRuntimeCallSpill {
 private:
   MacroAssembler* _masm;
@@ -475,13 +471,6 @@ void ZBarrierSetAssembler::arraycopy_prologue(MacroAssembler* masm,
                                               Register dst,
                                               Register count,
                                               RegSet saved_regs) {
-  BLOCK_COMMENT("ZBarrierSetAssembler::arraycopy_prologue {");
-
-  if (UseRVV) {
-    load_wide_arraycopy_masks(masm);
-  }
-
-  BLOCK_COMMENT("} ZBarrierSetAssembler::arraycopy_prologue");
 }
 
 static void copy_load_barrier(MacroAssembler* masm,
@@ -516,11 +505,11 @@ static void copy_load_barrier(MacroAssembler* masm,
 }
 
 static void copy_store_barrier(MacroAssembler* masm,
-                        Register pre_ref,
-                        Register new_ref,
-                        Address src,
-                        Register tmp1,
-                        Register tmp2) {
+                               Register pre_ref,
+                               Register new_ref,
+                               Address src,
+                               Register tmp1,
+                               Register tmp2) {
   Label done;
   Label slow;
 
